@@ -136,3 +136,4 @@ __pycache__/
 output.mp4
 outvid
 yolov8n-pose.pt
+.DS_Store
