@@ -19,7 +19,7 @@ export const VideoPlayer = ({ dataURL, alignmentMask }) => {
   }
 
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginBottom:0}}>
       <Video
         source={{ uri: dataURL }}
         // style={{ width: 500*aspectRatio, height: 500 }}
@@ -30,7 +30,7 @@ export const VideoPlayer = ({ dataURL, alignmentMask }) => {
         isLooping
       />
       {(alignmentMask && frameIndex >= 0 && frameIndex < alignmentMask.length) && (
-        <Text>Form is {alignmentMask[frameIndex] ? "Good" : "Bad"}</Text>)}
+        <Text>Current form is {alignmentMask[frameIndex] ? <Text style={{fontWeight: '800'}}>Good ✅</Text> : <Text style={{fontWeight: '800'}}>Bad ❌</Text>}</Text>)}
     </View>
   );
 };

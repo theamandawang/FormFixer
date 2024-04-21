@@ -4,13 +4,12 @@ import HomeStyles from '../styles/HomeStyles';
 import * as ImagePicker from 'expo-image-picker';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AntDesign } from '@expo/vector-icons';
-import { Video, ResizeMode } from 'expo-av';
 import SharedStyles from '../styles/SharedStyles';
 import { VideoPlayer, base64ToVideo } from './VideoPlayer';
 
 // import RNFS from 'react-native-fs';
 // import RNVideo from 'react-native-video-processing';
-
+const MyProfile = require('../assets/my.png');
 const ip_addr = "10.20.0.92:8080";
 
 // const convertMovToMp4 = async (movUri) => {
@@ -31,7 +30,6 @@ const ip_addr = "10.20.0.92:8080";
 
 export default function HomeScreen({ navigation }) {
   const videoRef = useRef(null);
-  const [status, setStatus] = useState({});
   const [video, setVideo] = useState(null);
   const [renderedVideo, setRenderedVideo] = useState(null);
   const [exerciseAnalytics, setExerciseAnalytics] = useState(null);
@@ -102,6 +100,10 @@ export default function HomeScreen({ navigation }) {
     }
   };
 
+  function truncate(number) {
+    return Number(number.toFixed(2));
+  }
+
   return (
     <SafeAreaView style={SharedStyles.SafeArea}>
       {loading ?
@@ -115,17 +117,43 @@ export default function HomeScreen({ navigation }) {
         (
           <View style={{ alignItems: 'center' }}>
             <View style={HomeStyles.container}>
-              <Text style={HomeStyles.title}>Home Screen</Text>
-              {(renderedVideo && exerciseAnalytics) && (
+              {(renderedVideo && exerciseAnalytics) ? 
+              (
                 <>
-                  <VideoPlayer dataURL={renderedVideo} alignmentMask={exerciseAnalytics.alignment_mask} />
-                  <View style={{ display: 'flex' }}>
-                    <Text style={HomeStyles.stat}>Shoulder Alignment Score: {exerciseAnalytics.alignment_score}</Text>
-                    <Text style={HomeStyles.stat}>Max Knee Angle: {exerciseAnalytics.depth[1]}</Text>
-                    <Text style={HomeStyles.stat}>Max Hip Angle: {exerciseAnalytics.depth[0]}</Text>
+                  <View style={{flex: 1, alignItems: 'center', marginTop: 0, padding: 0}}>
+                    <Text style={{fontSize: 24, fontWeight: '600'}}>Your Squat Analysis</Text>
+                    <VideoPlayer dataURL={renderedVideo} alignmentMask={exerciseAnalytics.alignment_mask} />
+                    <View style={{ display: 'flex', marginBottom: 15, padding: 0, justifyContent: 'flex-start', alignItems: 'center'}}>
+                      <Text style={HomeStyles.stat}>
+                        Shoulder Alignment Score:{' '} <Text style={{fontWeight: '800'}}> {truncate(exerciseAnalytics.alignment_score)}%</Text>
+                      </Text>
+                      <Text style={HomeStyles.stat}>
+                        Max Knee Angle:{' '} <Text style={{fontWeight: '800'}}> {truncate(exerciseAnalytics.depth[1])}°</Text>
+                      </Text>
+                      <Text style={HomeStyles.stat}>
+                        Max Hip Angle:{' '} <Text style={{fontWeight: '800'}}> {truncate(exerciseAnalytics.depth[0])}°</Text>
+                      </Text>
+                    </View>
                   </View>
                 </>
-              )}
+              )
+            :
+            (
+              <>
+                <View style={{width: '100%', padding: 10, flexDirection: 'row'}}>
+                  <Image source={MyProfile} style={{marginRight: 20}}/>
+                  <View style={{flex: 1, width: 55, flexDirection: 'column'}}>
+                    <Text style={HomeStyles.greeting}>Good Morning, My</Text>
+                    <Text style={HomeStyles.streak}>Keep up the 3-day streak 🔥!</Text>
+                  </View>
+                </View>
+                <View style={{flex: 1, alignItems: 'center', justifyContent: 'center', height: '100%'}}>
+                  <Text style={HomeStyles.greeting}>Log your workout today!</Text>
+                </View>
+                
+              </>
+            )
+            }
             </View>
             <View style={HomeStyles.footer}>
               <Image source={require('../assets/navbar.png')} style={HomeScreen.footerImage}/>

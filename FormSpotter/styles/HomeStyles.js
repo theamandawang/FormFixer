@@ -25,7 +25,7 @@ export default StyleSheet.create({
   },
   uploadButton: {
     borderRadius: 100,
-    marginBottom: 40,
+    marginBottom: 35,
     height: 80,
     width: 80,
     backgroundColor: '#FFA34E',
@@ -34,19 +34,16 @@ export default StyleSheet.create({
     alignItems: 'center',
     borderWidth: 0,
   },
-  title: {
-    marginTop: 16,
-    paddingVertical: 8,
-    paddingHorizontal: 35,
-    borderWidth: 1,
-    borderColor: '#20232a',
-    borderRadius: 15,
-    backgroundColor: '#FFA34E',
-    color: '#20232a',
-    textAlign: 'center',
-    fontSize: 18,
-    overflow: 'hidden',
-    // fontWeight: 'bold',
+  greeting: {
+    // marginTop: 16,
+    // paddingVertical: 8,
+    // paddingHorizontal: 35,
+    // textAlign: 'center',
+    fontSize: 24,
+    fontWeight: '400',
+  },
+  streak: {
+    fontSize: 20,
   },
   videoContainer: {
     flex: 1,

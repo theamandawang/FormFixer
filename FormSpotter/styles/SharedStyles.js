@@ -17,7 +17,7 @@ export default StyleSheet.create({
     alignItems: 'center',
   },
   loadingText: {
-    fontSize: 18,
+    fontSize: 24,
     fontWeight: '600',
   }
 });
