@@ -51,5 +51,10 @@ export default StyleSheet.create({
     width: windowWidth * 0.75,
     aspectRatio: 9/16,
     borderRadius: 20,
+  },
+  stat: {
+    color: '#20232a',
+    textAlign: 'center',
+    fontSize: 15,
   }
 });
