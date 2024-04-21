@@ -1,4 +1,5 @@
 import ffmpeg
+import numpy as np
 import os
 from pathlib import Path
 from tempfile import TemporaryDirectory
@@ -21,47 +22,83 @@ def process_video(file):
 
     file.save(tmp_path)
     os.chmod(tmp_path, 777)
-    ret = check_form(tmp_path)
+    alignment_score, alignment_mask, depth = check_form(tmp_path)
     os.remove(tmp_path)
     
     out_avi = os.path.join("/usr/src/ultralytics/runs/pose/predict", tmp_name + ".avi")
     out_mp4 = os.path.join("/usr/src/ultralytics/runs/pose/predict", tmp_name + ".mp4")
     avi_to_mp4(out_avi, out_mp4)
 
-    return out_mp4, ret
+    return out_mp4, alignment_score, alignment_mask, depth
 
 
 def check_form(video_path):
-    return model.predict(video_path, save=True)[0].tojson()
+    # make sure variance is less than some ratio between torso length or something
+    # make sure you normalize x value
 
-    up_down_thresh = 0.7
-    squat_x_coord = 0
+    # return model.predict(video_path, save=True)[0].tojson()
+    # ret = model.predict(video_path, save=True)[0]
+    ret = model.predict(video_path, save=True)
 
-    left_shoulder = [result.keypoints.xy[0][6] for result in results]
-    print(left_shoulder)
+    left_shoulder_x = [result.keypoints.xy[0][5][0] for result in ret]
+    left_shoulder = [result.keypoints.xy[0][5] for result in ret] # left shoulder:6
+    left_hip = [result.keypoints.xy[0][11] for result in ret] # left hip:12
+    left_knee = [result.keypoints.xy[0][13] for result in ret] # left knee:14
+    left_ankle = [result.keypoints.xy[0][15] for result in ret] # left ankle:16
 
-    mean_x_left_shoulder = np.mean(left_shoulder[:10])
+    alignment_score, alignment_mask = squat_alignment(left_shoulder_x, 30)
+    depth = squat_depth(left_shoulder, left_hip, left_knee, left_ankle)
 
-    poses = results.xyxy[0]  # Assuming the first index contains the pose data
+    return alignment_score, alignment_mask, depth
 
-    # Initialize variables to track the lowest hip position and corresponding frame
-    lowest_hip_position = float('inf')
-    deepest_frame_index = None
+def squat_alignment(left_shoulder_x, squat_x_threshold):
+    frame_mask = []
+    mean_x_left_shoulder = np.mean(left_shoulder_x[:10])
+    within_threshold_count_x = 0
+    for i in range(len(left_shoulder_x)):
+        x_diff = abs(left_shoulder_x[i] - mean_x_left_shoulder)
+        if x_diff < squat_x_threshold:
+            within_threshold_count_x += 1
+            frame_mask.append(True)
+        else:
+            frame_mask.append(False)
 
-    # Iterate through each pose detected in each frame
-    for frame_index, pose in enumerate(poses):
-        # Extract keypoint coordinates for the pose
-        key_points = pose['keypoints']
 
-        # Extract the y-coordinate of the hips
-        hip_y_coordinate = key_points[0][1]  # Assuming the first keypoint represents the hips
+    percentage_within_threshold_x = (within_threshold_count_x / len(left_shoulder_x)) * 100
+    # print(percentage_within_threshold_x)
+    return percentage_within_threshold_x, frame_mask
 
-        # Update the lowest hip position and corresponding frame index if a lower position is found
-        if hip_y_coordinate < lowest_hip_position:
-            lowest_hip_position = hip_y_coordinate
-            deepest_frame_index = frame_index
+import math
 
-    # Print the frame index with the deepest squat
-    print("Deepest squat frame index:", deepest_frame_index)
+def angle_between_points(p1, p2, p3):
+    """Calculate the angle between three points."""
+    # Calculate the lengths of the sides of the triangle
+    a = math.sqrt((p2[0] - p1[0])**2 + (p2[1] - p1[1])**2)
+    b = math.sqrt((p3[0] - p2[0])**2 + (p3[1] - p2[1])**2)
+    c = math.sqrt((p1[0] - p3[0])**2 + (p1[1] - p3[1])**2)
 
-    return []
+    # Check if the three points form a valid triangle
+    if a + b <= c or a + c <= b or b + c <= a:
+        return -1
+
+    # Calculate the angle using the Law of Cosines
+    angle_rad = math.acos((a**2 + b**2 - c**2) / (2 * a * b))
+    angle_deg = math.degrees(angle_rad)
+    return angle_deg
+
+
+def squat_depth(shoulder, hip, knee, ankle):
+    angle_shoulder_hip_knee = 360
+    angle_hip_knee_ankle = 360
+    for i in range(len(shoulder)):
+        cur_angle_shoulder_hip_knee = angle_between_points(shoulder[i], hip[i], knee[i])
+        cur_angle_hip_knee_ankle = angle_between_points(hip[i], knee[i], ankle[i])  # Adjust the last parameter if needed
+
+        # print(cur_angle_shoulder_hip_knee, cur_angle_hip_knee_ankle)
+
+        if cur_angle_shoulder_hip_knee > 45:
+            angle_shoulder_hip_knee = min(angle_shoulder_hip_knee, cur_angle_shoulder_hip_knee)
+        if cur_angle_hip_knee_ankle > 45:
+            angle_hip_knee_ankle = min(angle_hip_knee_ankle, cur_angle_hip_knee_ankle)
+
+    return angle_shoulder_hip_knee, angle_hip_knee_ankle

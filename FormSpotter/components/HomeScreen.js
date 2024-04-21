@@ -34,6 +34,7 @@ export default function HomeScreen({ navigation }) {
   const [status, setStatus] = useState({});
   const [video, setVideo] = useState(null);
   const [renderedVideo, setRenderedVideo] = useState(null);
+  const [exerciseAnalytics, setExerciseAnalytics] = useState(null);
 
   const [loading, setLoading] = useState(false);
 
@@ -64,11 +65,13 @@ export default function HomeScreen({ navigation }) {
           'Content-Type': 'multipart/form-data',
         },
       });
-      
+
       const data = await response.json();
       const b64_video = await base64ToVideo(data.file_content);
+
+      setExerciseAnalytics(data.tracking_data);
       setRenderedVideo(b64_video);
-      
+
       if (response.ok) {
         Alert.alert('Video uploaded successfully');
       } else {
@@ -109,34 +112,19 @@ export default function HomeScreen({ navigation }) {
         )
         :
         (
-          <View style={{alignItems: 'center'}}>
+          <View style={{ alignItems: 'center' }}>
             <View style={HomeStyles.container}>
               <Text style={HomeStyles.title}>Home Screen</Text>
-              {/* {video &&
-                <View style={styles.videoContainer}>
-                  <Video
-                    ref={videoRef}
-                    style={styles.video}
-                    source={{
-                      uri: video.uri,
-                    }}
-                    useNativeControls
-                    resizeMode={ResizeMode.CONTAIN}
-                    isLooping={true}
-                    onPlaybackStatusUpdate={status => setStatus(() => status)}
-                  />
-                  <View style={styles.buttons}>
-                    <Button
-                      title={status.isPlaying ? 'Pause' : 'Play'}
-                      onPress={() =>
-                        status.isPlaying ? videoRef.current.pauseAsync() : videoRef.current.playAsync()
-                      }
-                    />
+              {(renderedVideo && exerciseAnalytics) && (
+                <>
+                  <VideoPlayer dataURL={renderedVideo} alignmentMask={exerciseAnalytics.alignment_mask} />
+                  <View style={{ display: 'flex' }}>
+                    <Text style={HomeStyles.stat}>Shoulder Alignment Score: {exerciseAnalytics.alignment_score}</Text>
+                    <Text style={HomeStyles.stat}>Max Knee Angle: {exerciseAnalytics.depth[1]}</Text>
+                    <Text style={HomeStyles.stat}>Max Hip Angle: {exerciseAnalytics.depth[0]}</Text>
                   </View>
-                </View>
-
-              } */}
-              {renderedVideo ? (<VideoPlayer dataURL={renderedVideo} />) : (<Text>LOL you're video flopped</Text>)}
+                </>
+              )}
             </View>
             <View style={HomeStyles.footer}>
               <Image source={require('../assets/navbar.png')} style={HomeScreen.footerImage}></Image>
@@ -154,7 +142,6 @@ export default function HomeScreen({ navigation }) {
   );
 }
 const styles = StyleSheet.create({
-
   videoContainer: {
     flex: 1,
     justifyContent: 'center',
