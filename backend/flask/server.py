@@ -1,13 +1,14 @@
 #!/usr/bin/env python
+import base64
 import os
 
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_file, after_this_request
 from pymongo import MongoClient
 
 from video import process_video
 
 app = Flask(__name__)
-app.config['MAX_CONTENT_LENGTH'] = 1024 * 1024 * 1024 # 1GB
+# app.config['MAX_CONTENT_LENGTH'] = 1024 * 1024 * 1024 # 1GB
 
 client = MongoClient("mongo:27017")
 
@@ -30,9 +31,17 @@ def upload_video():
         return jsonify({'error': 'Unsupported file format. Only MP4 videos are allowed'}), 400
 
     # Process file
-    track: list[(int, bool)] = process_video(file)
+    out_path, res = process_video(file)
 
-    return jsonify({'message': 'Video uploaded successfully'}), 200
+    # Encode file content as base64
+    with open(out_path, 'rb') as f:
+        file_content = base64.b64encode(f.read()).decode('utf-8')
+
+    # Delete the file after reading
+    os.remove(out_path)
+
+    response_data = {'tracking_data': res, 'file_content': file_content}
+    return jsonify(response_data), 200
 
 
 if __name__ == "__main__":

@@ -1,7 +1,7 @@
 #!/bin/sh
 
 curl -X POST \
-    -F "file=@./../../res/demo.mp4" http://localhost:8080/upload 
+    -F "file=@./../../res/demo.mp4" \
     http://localhost:8080/upload 
     # -d @./test.txt \
     # -d @./../../res/demo.mp4 \

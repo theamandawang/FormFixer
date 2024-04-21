@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1.4
-FROM --platform=$BUILDPLATFORM python:3.10 AS builder
+FROM --platform=$BUILDPLATFORM ultralytics/ultralytics:latest AS builder
 
 WORKDIR /src
 COPY requirements.txt /src
