@@ -1,5 +1,6 @@
-import { SafeAreaView, View, Text, Image, TouchableOpacity } from 'react-native';
+import { ImageBackground, SafeAreaView, View, Text, Image, TouchableOpacity } from 'react-native';
 import FrontScreenStyles from '../styles/FrontScreenStyles'; // Import styles
+import SharedStyles from '../styles/SharedStyles';
 import { useNavigation } from '@react-navigation/native';
 
 export default function FrontScreen() {
@@ -10,13 +11,13 @@ export default function FrontScreen() {
   };
 
   return (
-    <SafeAreaView style={FrontScreenStyles.container}>
-      <View style={FrontScreenStyles.content}>
-        <Image
-          source={require('../assets/banana_logo.jpeg')}
-          style={FrontScreenStyles.image}
-        />
-        <Text style={FrontScreenStyles.title}>👋 Welcome to Form Spotter</Text>
+    <SafeAreaView style={{ flex: 1 }}>
+      <ImageBackground
+        source={require('../assets/welcome.jpg')}
+        resizeMode='cover'
+        style={{ flex: 1, justifyContent: 'center', padding: 40 }}
+      >
+        <Text style={FrontScreenStyles.title}>👋 Welcome to FormFixer</Text>
         <Text style={FrontScreenStyles.subtitle}>Your personal AI-powered trainer! To help you boost your confidence and stay motivated at the gym. </Text>
         <TouchableOpacity style={FrontScreenStyles.button}>
           <Text style={FrontScreenStyles.buttonText}>SIGN UP</Text>
@@ -24,7 +25,8 @@ export default function FrontScreen() {
         <TouchableOpacity onPress={handleContinueAsGuest}>
           <Text style={FrontScreenStyles.guestText}>Continue as Guest!</Text>
         </TouchableOpacity>
-      </View>
+
+      </ImageBackground>
     </SafeAreaView>
   );
 };

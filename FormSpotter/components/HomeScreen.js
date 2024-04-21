@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { StyleSheet, TouchableOpacity, Image, Button, Text, View, Alert, ActivityIndicator } from 'react-native';
+import { StyleSheet, TouchableOpacity, Image, Text, View, Alert, ActivityIndicator } from 'react-native';
 import HomeStyles from '../styles/HomeStyles';
 import * as ImagePicker from 'expo-image-picker';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -101,13 +101,14 @@ export default function HomeScreen({ navigation }) {
       setVideo(result.assets[0]);
     }
   };
+
   return (
     <SafeAreaView style={SharedStyles.SafeArea}>
       {loading ?
         (
-          <View>
-            <Text style={HomeStyles.title}>This could take a minute or two</Text>
-            <ActivityIndicator size="large" color="blue" />
+          <View style={SharedStyles.loading}>
+            <Text style={SharedStyles.loadingText}>Analyzing...</Text>
+            <ActivityIndicator animating={true} size="large" color="#FFA34E" />
           </View>
         )
         :
@@ -127,7 +128,7 @@ export default function HomeScreen({ navigation }) {
               )}
             </View>
             <View style={HomeStyles.footer}>
-              <Image source={require('../assets/navbar.png')} style={HomeScreen.footerImage}></Image>
+              <Image source={require('../assets/navbar.png')} style={HomeScreen.footerImage}/>
             </View>
             <TouchableOpacity
               style={HomeStyles.uploadButton}
