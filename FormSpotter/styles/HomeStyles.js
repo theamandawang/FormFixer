@@ -4,32 +4,35 @@ const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
 export default StyleSheet.create({
-  SafeArea: {
-    flex: 1,
-    backgroundColor: "white",
-    paddingTop: Platform.OS === "android" ? 10 : 0
-  },
   container: {
-    // top: 0,
-    // bottom: 0,
-    // left: 0,
-    // right: 0,
-    // // flex: 1,
-    // // alignItems: 'center',
-    // // justifyContent: 'center',
+    flex: 1,
+    // alignItems: 'center',
+    // justifyContent: 'center',
     // backgroundColor: '#00ff00',
   },
-  bottom: {
-    // flex: 1,
-    marginTop: 15,
-    // padding: 10,
+  footer: {
+    // backgroundColor: '#cccccc99',
+    alignItems: 'center',
     position: 'absolute',
     bottom: 0,
-    width: windowWidth,
-    height: windowHeight * 0.05,
-    alignItems: 'center',
+    left: 0,
+    right: 0,
+    // height: windowHeight * 0.08,
+    // maxHeight: 150
+  },
+  footerImage: {
+    maxHeight: 150,
+  },
+  uploadButton: {
+    borderRadius: 100,
+    marginBottom: 40,
+    height: 80,
+    width: 80,
+    backgroundColor: '#e9abab',
+    textAlign: 'center',
     justifyContent: 'center',
-    backgroundColor: '#ff0000',
+    alignItems: 'center',
+    
   },
   title: {
     marginTop: 16,

@@ -3,11 +3,6 @@ import { StatusBar } from 'expo-status-bar';
 
 
 export default StyleSheet.create({
-    SafeArea: {
-        flex: 1,
-        backgroundColor: "white",
-        paddingTop: Platform.OS === "android" ? 30 : 0
-    },
     button: {
         alignItems: 'center',
         backgroundColor: '#DDDDDD',
