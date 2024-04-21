@@ -46,4 +46,10 @@ export default StyleSheet.create({
     fontSize: 30,
     fontWeight: 'bold',
   },
+  video: {
+    alignSelf: 'stretch',
+    width: windowWidth * 0.75,
+    aspectRatio: 9/16,
+    borderRadius: 20,
+  }
 });

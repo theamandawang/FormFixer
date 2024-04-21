@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { StyleSheet, TouchableOpacity, Image, Button, Text, View, Alert, ActivityIndicator } from 'react-native';
 import HomeStyles from '../styles/HomeStyles';
 import * as ImagePicker from 'expo-image-picker';
@@ -6,29 +6,68 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { AntDesign } from '@expo/vector-icons';
 import { Video, ResizeMode } from 'expo-av';
 import SharedStyles from '../styles/SharedStyles';
+import { VideoPlayer, base64ToVideo } from './VideoPlayer';
 
+// import RNFS from 'react-native-fs';
+// import RNVideo from 'react-native-video-processing';
+
+const ip_addr = "10.20.0.92:8080";
+
+// const convertMovToMp4 = async (movUri) => {
+//   try {
+//     // Get the directory path where the converted video will be saved
+//     const outputPath = `${RNFS.DocumentDirectoryPath}/tmp.mp4`;
+
+//     // Convert the video
+//     await RNVideo.convertToMp4(movUri, outputPath);
+
+//     console.log('Video conversion successful');
+//     return outputPath;
+//   } catch (error) {
+//     console.error('Error converting video:', error);
+//     return null;
+//   }
+// };
 
 export default function HomeScreen({ navigation }) {
   const videoRef = useRef(null);
   const [status, setStatus] = useState({});
   const [video, setVideo] = useState(null);
+  const [renderedVideo, setRenderedVideo] = useState(null);
 
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    handleUploadVideo();
+  }, [video]);
+
   // uploads
   const handleUploadVideo = async () => {
+    if (!video)
+      return;
+
     try {
       setLoading(true);
       const formData = new FormData();
-      formData.append('video', video);
+      // const mp4_video = await convertMovToMp4(video);
 
-      const response = await fetch('/upload', {
+      formData.append('file', {
+        uri: video.uri,
+        name: video.fileName,
+        type: 'video/mp4',
+      });
+
+      const response = await fetch(`http://${ip_addr}/upload`, {
         method: 'POST',
         body: formData,
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
-
+      
+      const data = await response.json();
+      const b64_video = await base64ToVideo(data.file_content);
+      setRenderedVideo(b64_video);
       
       if (response.ok) {
         Alert.alert('Video uploaded successfully');
@@ -56,8 +95,7 @@ export default function HomeScreen({ navigation }) {
     console.log(result);
 
     if (!result.canceled) {
-      setVideo(result.assets[0].uri);
-      handleUploadVideo();
+      setVideo(result.assets[0]);
     }
   };
   return (
@@ -65,6 +103,7 @@ export default function HomeScreen({ navigation }) {
       {loading ?
         (
           <View>
+            <Text style={HomeStyles.title}>This could take a minute or two</Text>
             <ActivityIndicator size="large" color="blue" />
           </View>
         )
@@ -73,13 +112,13 @@ export default function HomeScreen({ navigation }) {
           <View style={{alignItems: 'center'}}>
             <View style={HomeStyles.container}>
               <Text style={HomeStyles.title}>Home Screen</Text>
-              {video &&
+              {/* {video &&
                 <View style={styles.videoContainer}>
                   <Video
                     ref={videoRef}
                     style={styles.video}
                     source={{
-                      uri: video,
+                      uri: video.uri,
                     }}
                     useNativeControls
                     resizeMode={ResizeMode.CONTAIN}
@@ -96,7 +135,8 @@ export default function HomeScreen({ navigation }) {
                   </View>
                 </View>
 
-              }
+              } */}
+              {renderedVideo ? (<VideoPlayer dataURL={renderedVideo} />) : (<Text>LOL you're video flopped</Text>)}
             </View>
             <View style={HomeStyles.footer}>
               <Image source={require('../assets/navbar.png')} style={HomeScreen.footerImage}></Image>
