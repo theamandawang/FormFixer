@@ -1,6 +1,9 @@
-<img src="res/banner.jpg" width=36 height=36>
+![Banner](res/banner.png)
 
 # FormFixer: Revolutionizing Fitness with Cutting-Edge AI!
+
+![Good Squat](res/squat_good.png)
+![Bad Squat](res/squat_bad.png)
 
 ## Inspiration
 
