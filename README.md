@@ -2,8 +2,6 @@
 
 # FormFixer: Revolutionizing Fitness with Cutting-Edge AI!
 
-<img src="res/squat_good.jpg" width=410> <img src="res/squat_bad.jpg" width=410>
-
 ## Inspiration
 
 Tired of guesswork in the gym? New to lifting and don't know where to start? Say goodbye to uncertainty and hello to precision with FormFixer.
@@ -13,6 +11,8 @@ Imagine stepping into the gym and having a personal trainer at your fingertips, 
 FormFixer uses state-of-the-art object detection and pose estimation algorithms that seamlessly analyze your every move in near real-time, meticulously evaluating your form and providing actionable insights to optimize your workouts and reduce your risk of injury.
 
 Join the fitness revolution today with FormFixer, empowering people in their fitness journeys and redefining the way the world trains, one rep at a time.
+
+<img src="res/squat_good.jpg" width=410> <img src="res/squat_bad.jpg" width=410>
 
 ## What it does
 
