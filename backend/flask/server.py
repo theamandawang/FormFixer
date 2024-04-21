@@ -31,7 +31,7 @@ def upload_video():
         return jsonify({'error': 'Unsupported file format. Only MP4 videos are allowed'}), 400
 
     # Process file
-    out_path, res = process_video(file)
+    out_path, alignment_score, alignment_mask, depth = process_video(file)
 
     # Encode file content as base64
     with open(out_path, 'rb') as f:
@@ -40,7 +40,14 @@ def upload_video():
     # Delete the file after reading
     os.remove(out_path)
 
-    response_data = {'tracking_data': res, 'file_content': file_content}
+    response_data = {
+        'tracking_data': {
+            'alignment_score': alignment_score,
+            'alignment_mask': alignment_mask,
+            'depth': depth,
+        },
+        'file_content': file_content
+    }
     return jsonify(response_data), 200
 
 
