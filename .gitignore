@@ -128,3 +128,10 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# pyvenv
+pyvenv/
+__pycache__/
+test/output.mp4
+test/outvid
+flask/yolov8n-pose.pt
