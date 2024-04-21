@@ -2,7 +2,7 @@
 
 # FormFixer: Revolutionizing Fitness with Cutting-Edge AI!
 
-<img src="res/squat_good.jpg" width=425> <img src="res/squat_bad.jpg" width=425>
+<img src="res/squat_good.jpg" width=415> <img src="res/squat_bad.jpg" width=415>
 
 ## Inspiration
 
