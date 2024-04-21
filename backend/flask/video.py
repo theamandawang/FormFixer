@@ -11,6 +11,7 @@ model = YOLO('yolov8n-pose.pt')
 
 def avi_to_mp4(avi_path, mp4_path):
     ffmpeg.input(avi_path).output(mp4_path).run()
+    os.remove(avi_path)
 
 def process_video(file):
     ret = None
@@ -30,10 +31,8 @@ def process_video(file):
     return out_mp4, ret
 
 
-def check_form(video_path) -> list[(int, str)]:
-    res = model.predict(video_path, save=True)
-
-    return []
+def check_form(video_path):
+    return model.predict(video_path, save=True)[0].tojson()
 
     up_down_thresh = 0.7
     squat_x_coord = 0

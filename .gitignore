@@ -131,7 +131,8 @@ dist
 
 # pyvenv
 pyvenv/
+
 __pycache__/
-test/output.mp4
-test/outvid
-flask/yolov8n-pose.pt
+output.mp4
+outvid
+yolov8n-pose.pt
