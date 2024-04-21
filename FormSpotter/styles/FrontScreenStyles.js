@@ -16,30 +16,36 @@ export default StyleSheet.create({
     marginBottom: 20,
   },
   title: {
+    marginTop: 380,
     fontSize: 42,
-    fontWeight: 'bold',
+    color: 'white',
+    // fontWeight: 'bold',
     marginBottom: 20,
   },
   subtitle: {
+    color: 'white',
     fontSize: 18,
     marginBottom: 20,
   },
   button: {
-    backgroundColor: '#E9ABAB',
+    backgroundColor: '#FFA34E',
+    textAlign: 'center',
+    textAlignVertical: 'center',
     paddingVertical: 10,
-    paddingHorizontal: 110,
     borderRadius: 20,
     marginBottom: 20,
     borderWidth: 1, // Add border width
     borderColor: 'black', // Add border color
   },
   buttonText: {
+    textAlign: 'center',
+    fontWeight: '800',
     fontSize: 18,
     color: '#000',
   },
   guestText: {
     fontSize: 16,
-    color: '#666',
+    color: 'white',
     textDecorationLine: 'underline',
   },
 });

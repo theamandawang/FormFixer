@@ -10,4 +10,14 @@ export default StyleSheet.create({
     alignItems: 'center',
     paddingTop: Platform.OS === "android" ? 10 : 0
   },
+  loading: {
+    flex: 1,
+    justifyContent: 'center',
+    alignContent: 'center',
+    alignItems: 'center',
+  },
+  loadingText: {
+    fontSize: 18,
+    fontWeight: '600',
+  }
 });

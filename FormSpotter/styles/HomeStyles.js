@@ -28,28 +28,48 @@ export default StyleSheet.create({
     marginBottom: 40,
     height: 80,
     width: 80,
-    backgroundColor: '#e9abab',
+    backgroundColor: '#FFA34E',
     textAlign: 'center',
     justifyContent: 'center',
     alignItems: 'center',
-    
+    borderWidth: 0,
   },
   title: {
     marginTop: 16,
     paddingVertical: 8,
-    borderWidth: 4,
+    paddingHorizontal: 35,
+    borderWidth: 1,
     borderColor: '#20232a',
-    borderRadius: 6,
-    backgroundColor: '#61dafb',
+    borderRadius: 15,
+    backgroundColor: '#FFA34E',
     color: '#20232a',
     textAlign: 'center',
-    fontSize: 30,
-    fontWeight: 'bold',
+    fontSize: 18,
+    overflow: 'hidden',
+    // fontWeight: 'bold',
+  },
+  videoContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#ecf0f1',
+  },
+  video: {
+    alignSelf: 'stretch',
+    width: windowWidth*0.75,
+    aspectRatio: 9/16,
+    borderRadius: 20, // Adjust this value for rounded corners
+    // height: 350, // Adjust height to make it vertical
   },
   video: {
     alignSelf: 'stretch',
     width: windowWidth * 0.75,
     aspectRatio: 9/16,
     borderRadius: 20,
+  },
+  stat: {
+    color: '#20232a',
+    textAlign: 'center',
+    fontSize: 15,
   }
 });
