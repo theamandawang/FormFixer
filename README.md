@@ -1,3 +1,5 @@
+<img src="res/banner.jpg" width=36 height=36>
+
 # FormFixer: Revolutionizing Fitness with Cutting-Edge AI!
 
 ## Inspiration
